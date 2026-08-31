@@ -11,7 +11,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --olive:#8A8B2C;        /* jaune olive */
@@ -31,26 +31,85 @@
   --moutarde:#E3A62B;
   --violet:#6B4E9E;
   --violet-dark:#4E3873;
+  /* Couleurs relevées sur la façade CASA LOVA */
+  --sign-red:#B31B14;         /* rouge des lettres de l'enseigne */
+  --sign-red-light:#E24B33;   /* même rouge éclairci, pour les fonds sombres */
+  --fond:#E3E7A9;             /* jaune olive de la façade */
+  --fond-light:#EDF0CB;       /* même olive, éclairci pour les sections */
+  --or:#E5A400;               /* or des étoiles */
+  --or-clair:#FFD447;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--cream);color:var(--ink);font-family:Manrope,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+body{background:var(--fond);color:var(--ink);font-family:Manrope,system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
 h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.05;letter-spacing:-.02em}
 .container{width:min(1140px,92%);margin:auto}
 
 /* HEADER */
-header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(251,246,234,.82);border-bottom:1px solid rgba(138,139,44,.25)}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(227,231,169,.88);border-bottom:1px solid rgba(138,139,44,.35)}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 0}
-.logo{font-family:Fraunces;font-weight:800;font-size:1.7rem;letter-spacing:.14em;color:var(--rouge)}
-.logo span{color:var(--rouge)}
+/* LOGO — lettres rouges en relief, comme l'enseigne de la façade */
+.logo{
+  display:inline-flex;align-items:baseline;gap:.35em;
+  font-family:"Alfa Slab One",Rockwell,"Roboto Slab",Georgia,serif;
+  font-weight:400;font-size:1.75rem;line-height:1;letter-spacing:.02em;
+  color:var(--sign-red);
+  text-decoration:none;
+  text-shadow:0 2px 0 rgba(110,14,10,.30);
+  transition:transform .35s cubic-bezier(.2,.7,.3,1),text-shadow .35s;
+}
+.logo:hover{transform:translateY(-2px);text-shadow:0 4px 6px rgba(110,14,10,.32)}
+.logo span{color:var(--sign-red)}
+@media(max-width:520px){.logo{font-size:1.3rem}}
 .nav ul{display:flex;gap:1.8rem;list-style:none;font-weight:500}
-.nav ul a{position:relative}
+/* liens du menu : noir (et non le violet « lien visité » du navigateur) */
+.nav ul a,.nav ul a:link,.nav ul a:visited,.nav ul a:hover,.nav ul a:active{color:#000;text-decoration:none}
+.nav ul a{position:relative;font-weight:600}
 .nav ul a::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:0;background:var(--rouge);transition:width .3s}
 .nav ul a:hover::after{width:100%}
-@media(max-width:820px){.nav ul{display:none}}
+
+/* BOUTON MENU « TROIS TRAITS » — visible sur mobile uniquement */
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:0 6px;background:none;border:none;cursor:pointer}
+.burger span{display:block;width:100%;height:3px;border-radius:999px;background:#000;transition:transform .35s cubic-bezier(.2,.7,.3,1),opacity .2s ease}
+.burger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.burger:focus-visible{outline:2px solid var(--rouge);outline-offset:2px;border-radius:8px}
+
+@media(max-width:820px){
+  .burger{display:flex}
+  .nav{position:relative}
+  /* le menu devient un panneau qui glisse sous l'en-tête */
+  .nav ul{
+    position:absolute;top:calc(100% + .8rem);left:0;right:0;z-index:60;
+    flex-direction:column;gap:0;
+    padding:.45rem;border-radius:16px;
+    background:var(--fond-light);
+    border:1px solid rgba(138,139,44,.4);
+    box-shadow:0 24px 44px -24px rgba(36,31,22,.7);
+    opacity:0;visibility:hidden;transform:translateY(-14px);
+    transition:opacity .3s ease,transform .35s cubic-bezier(.2,.7,.3,1),visibility .35s;
+  }
+  .nav ul.open{opacity:1;visibility:visible;transform:translateY(0)}
+  /* chaque entrée descend à son tour, de haut en bas */
+  .nav ul li{opacity:0;transform:translateY(-14px);transition:opacity .3s ease,transform .35s cubic-bezier(.2,.7,.3,1)}
+  .nav ul.open li{opacity:1;transform:none}
+  .nav ul.open li:nth-child(1){transition-delay:.06s}
+  .nav ul.open li:nth-child(2){transition-delay:.12s}
+  .nav ul.open li:nth-child(3){transition-delay:.18s}
+  .nav ul.open li:nth-child(4){transition-delay:.24s}
+  .nav ul.open li:nth-child(5){transition-delay:.30s}
+  .nav ul li+li{border-top:1px solid rgba(138,139,44,.28)}
+  .nav ul a{display:block;padding:.9rem 1rem;font-size:1.05rem;border-radius:10px}
+  .nav ul a:active{background:rgba(196,43,28,.10)}
+  .nav ul a::after{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .nav ul,.nav ul li,.burger span{transition-duration:.01ms}
+}
 
 /* HERO */
-.hero{position:relative;padding:6rem 0 5rem;overflow:hidden;background:radial-gradient(circle at 15% 20%, rgba(227,166,42,.16), transparent 55%),radial-gradient(circle at 85% 80%, rgba(78,140,130,.14), transparent 55%),var(--cream)}
+.hero{position:relative;padding:6rem 0 5rem;overflow:hidden;background:radial-gradient(circle at 15% 20%, rgba(227,166,42,.16), transparent 55%),radial-gradient(circle at 85% 80%, rgba(78,140,130,.14), transparent 55%),var(--fond)}
 .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:float 14s ease-in-out infinite}
 .blob.a{width:420px;height:420px;background:var(--olive-light);top:-120px;right:-80px}
 .blob.b{width:340px;height:340px;background:#F0A6A0;bottom:-140px;left:-100px;animation-delay:-6s}
@@ -104,39 +163,43 @@ section{padding:5.5rem 0}
 .cards .card:nth-child(6){border-top:4px solid var(--olive)}
 
 /* UNIVERS */
-#univers{background:linear-gradient(160deg, rgba(138,139,44,.14), rgba(251,246,234,1) 45%, rgba(196,43,28,.10) 100%);position:relative;overflow:hidden}
+#univers{background:linear-gradient(160deg, rgba(138,139,44,.14), rgba(237,240,203,1) 45%, rgba(196,43,28,.10) 100%);position:relative;overflow:hidden}
 #univers::before{content:"";position:absolute;top:-80px;left:-80px;width:280px;height:280px;border-radius:50%;background:rgba(196,43,28,.10);filter:blur(10px)}
 #univers::after{content:"";position:absolute;bottom:-100px;right:-60px;width:320px;height:320px;border-radius:50%;background:rgba(138,139,44,.16);filter:blur(10px)}
 #univers .container{position:relative;z-index:1}
 #univers .card{background:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
 
 /* AVIS */
-#avis{background:linear-gradient(180deg, #fff 0%, rgba(227,154,154,.10) 50%, #fff 100%);position:relative}
-.review-form{background:linear-gradient(135deg, rgba(227,166,42,.10), var(--cream) 60%);border-radius:var(--radius);padding:1.8rem;border:1px dashed rgba(138,139,44,.4);margin-bottom:2rem}
-.review-form h3{font-size:1.3rem;margin-bottom:1rem}
-.review-form form{display:grid;gap:.8rem;grid-template-columns:1fr 1fr;align-items:start}
-.review-form input,.review-form select,.review-form textarea{width:100%;font-family:Manrope,sans-serif;padding:.7rem .9rem;border-radius:12px;border:1px solid rgba(107,100,85,.3);background:#fff}
-.review-form textarea{grid-column:1/-1;min-height:90px;resize:none;overflow:hidden}
-.review-form button{grid-column:1/-1;justify-self:start;background:var(--rouge);color:#fff;border:none;font-weight:700;padding:.75rem 1.6rem;border-radius:999px;cursor:pointer;font-family:Manrope,sans-serif}
-.review-form button:hover{background:var(--rouge-dark)}
-.review-form .confirm{grid-column:1/-1;color:var(--olive);font-weight:700;display:none}
+#avis{background:linear-gradient(180deg, var(--fond-light) 0%, rgba(227,154,154,.14) 50%, var(--fond-light) 100%);position:relative}
+/* BOUTON « LAISSER UN AVIS » AVEC LOGO GOOGLE INTÉGRÉ */
+.review-cta{display:flex;align-items:center;justify-content:center;margin-bottom:2.8rem}
+.btn-avis{display:inline-flex;align-items:center;gap:.8rem;background:var(--rouge);color:#fff;font-weight:700;font-size:1.02rem;padding:.5rem .5rem .5rem 1.9rem;border-radius:999px;text-decoration:none;box-shadow:0 14px 26px -16px rgba(196,43,28,.9);transition:transform .25s,background .25s,box-shadow .25s}
+.btn-avis:hover{background:var(--rouge-dark);transform:translateY(-3px);box-shadow:0 18px 32px -16px rgba(196,43,28,.95)}
+.btn-avis:focus-visible{outline:3px solid var(--rouge);outline-offset:3px}
+/* pastille blanche : détache le logo de la couleur du bouton */
+.brand-mark{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;background:#fff;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(36,31,22,.06)}
+.brand-mark svg{width:22px;height:22px;display:block}
+/* BOUTONS DE LA SECTION INFORMATIONS */
+.btn-lien{display:inline-flex;align-items:center;gap:.8rem;color:#fff;font-weight:700;padding:.75rem 1.4rem;border-radius:999px;text-decoration:none}
+.btn-insta{padding:.4rem .4rem .4rem 1.4rem;background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)}
+.btn-insta .brand-mark{width:36px;height:36px}
+.btn-insta .brand-mark svg{width:21px;height:21px}
 .infos a{transition:transform .25s,box-shadow .25s}
 .infos a:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-@media(max-width:600px){.review-form form{grid-template-columns:1fr}}
 .reviews{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.6rem}
 .review{background:var(--cream);border-radius:var(--radius);padding:1.8rem;border-top:5px solid var(--olive);transition:transform .35s}
 .review:hover{transform:translateY(-6px)}
 .reviews .review:nth-child(3n+1){border-top-color:var(--olive)}
 .reviews .review:nth-child(3n+2){border-top-color:var(--rouge)}
 .reviews .review:nth-child(3n+3){border-top-color:var(--teal)}
-.stars{color:#E5A400;letter-spacing:.15em}
+.stars{color:var(--or);letter-spacing:.15em;font-size:1.15rem;background:linear-gradient(180deg,var(--or-clair) 0%,var(--or) 55%,#B87F00 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
 .review p{margin:.9rem 0;font-size:.98rem}
 .review .who{font-weight:700}
 .review .when{font-size:.82rem;color:var(--muted)}
 
 
 /* INFOS */
-#infos{background:linear-gradient(200deg, rgba(227,166,42,.14), rgba(251,246,234,1) 45%, rgba(78,140,130,.12) 100%);position:relative;overflow:hidden}
+#infos{background:linear-gradient(200deg, rgba(227,166,42,.14), rgba(237,240,203,1) 45%, rgba(78,140,130,.12) 100%);position:relative;overflow:hidden}
 #infos::before{content:"";position:absolute;top:-60px;right:10%;width:260px;height:260px;border-radius:50%;background:rgba(196,43,28,.10);filter:blur(20px)}
 #infos::after{content:"";position:absolute;bottom:-90px;left:5%;width:300px;height:300px;border-radius:50%;background:rgba(227,154,154,.20);filter:blur(20px)}
 #infos .container{position:relative;z-index:1}
@@ -149,7 +212,9 @@ section{padding:5.5rem 0}
 
 footer{background:var(--ink);color:#EDE7D9;padding:3rem 0;text-align:center;position:relative;overflow:hidden}
 footer::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--rouge),var(--moutarde),var(--teal),var(--olive));opacity:.9;height:5px;top:0}
-footer .logo{color:#fff}
+/* sur le fond sombre du pied de page, le rouge est éclairci pour rester lisible */
+footer .logo{color:var(--sign-red-light);font-size:1.9rem;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+footer .logo span{color:var(--sign-red-light)}
 
 
 .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
@@ -160,7 +225,7 @@ footer .logo{color:#fff}
 .gallery figure:nth-child(1){outline:3px solid var(--terracotta);outline-offset:-3px}
 .gallery figure:nth-child(2){outline:3px solid var(--rose);outline-offset:-3px}
 .gallery figure:nth-child(3){outline:3px solid var(--teal);outline-offset:-3px}
-#galerie{background:linear-gradient(210deg, rgba(227,154,154,.14), rgba(251,246,234,1) 40%, rgba(227,166,42,.12) 100%);position:relative;overflow:hidden}
+#galerie{background:linear-gradient(210deg, rgba(227,154,154,.14), rgba(237,240,203,1) 40%, rgba(227,166,42,.12) 100%);position:relative;overflow:hidden}
 #galerie::before{content:"";position:absolute;top:20%;left:-70px;width:220px;height:220px;border-radius:50%;background:rgba(78,140,130,.14);filter:blur(18px)}
 #galerie .container{position:relative;z-index:1}
 </style>
@@ -169,8 +234,11 @@ footer .logo{color:#fff}
 
 <header>
   <div class="container nav">
-    <div class="logo">CASA <span>LOVA</span></div>
-    <ul aria-label="Sections de la présentation">
+    <a class="logo" href="#boutique" aria-label="CASA LOVA — retour en haut">CASA <span>LOVA</span></a>
+    <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu" aria-label="Sections de la présentation">
       <li><a href="#boutique"> La boutique</a></li>
       <li><a href="#univers"> Nos univers</a></li>
       <li><a href="#avis"> Avis</a></li>
@@ -238,24 +306,21 @@ footer .logo{color:#fff}
       <p>Note moyenne 5,0 ★ sur Google</p>
     </div>
 
-    <div class="review-form reveal">
-      <h3>Laissez votre avis</h3>
-      <form id="reviewForm">
-        <input type="text" id="reviewName" placeholder="Votre nom" required>
-        <select id="reviewStars" required>
-          <option value="5">★★★★★</option>
-          <option value="4">★★★★☆</option>
-          <option value="3">★★★☆☆</option>
-          <option value="2">★★☆☆☆</option>
-          <option value="1">★☆☆☆☆</option>
-        </select>
-        <textarea id="reviewText" placeholder="Votre expérience chez CASA LOVA…" required></textarea>
-        <button type="submit">Publier mon avis</button>
-        <span class="confirm" id="reviewConfirm">Merci pour votre avis ! 🎉</span>
-      </form>
+    <div class="review-cta reveal">
+      <a class="btn-avis" href="https://www.google.com/maps/place/Casa+lova/@48.6353411,-2.0138496,17z/data=!4m8!3m7!1s0x480e813f60fe749d:0x3f963cd78b152b46!8m2!3d48.6353411!4d-2.0138496!9m1!1b1!16s%2Fg%2F11x_1j_s31!5m1!1e1?entry=ttu&amp;g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
+        Laisser un avis
+        <span class="brand-mark">
+          <svg viewBox="0 0 48 48" role="img" aria-label="Google">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+        </span>
+      </a>
     </div>
 
-    <div class="reviews" id="reviewsList">
+    <div class="reviews">
       <div class="review reveal">
         <div class="stars">★★★★★</div>
         <p>« Incroyable !! Jolie boutique dans la 39 rue Ville-Pépin à Saint-Servan ! J'y suis allé dans l'optique d'offrir un cadeau pour ma nièce, la gérante m'a très bien conseillé ! En même temps j'avais envie de tout acheter !! Le lieu est cosy, agréable, chaleureux ! Je recommande pour avoir des idées cadeaux ou même pour chez soi d'ailleurs ! Top »</p>
@@ -297,7 +362,25 @@ footer .logo{color:#fff}
       <p style="color:var(--muted)">CASA LOVA<br>39 rue Ville-Pépin, Saint-Servan<br>35400 Saint-Malo</p>
       <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.2rem">
         <a href="https://www.google.com/maps/place/Casa+lova/@48.6353446,-2.0164245,17z/data=!3m1!4b1!4m6!3m5!1s0x480e813f60fe749d:0x3f963cd78b152b46!8m2!3d48.6353411!4d-2.0138496!16s%2Fg%2F11x_1j_s31!5m1!1e1?entry=ttu&g_ep=EgoyMDI2MDgyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="display:inline-block;background:var(--rouge);color:#fff;font-weight:700;padding:.75rem 1.4rem;border-radius:999px;text-decoration:none">📍 Itinéraire</a>
-        <a href="https://www.instagram.com/casalova.shop/" target="_blank" style="display:inline-block;background:var(--violet);color:#fff;font-weight:700;padding:.75rem 1.4rem;border-radius:999px;text-decoration:none">📷 Instagram</a>
+        <a class="btn-lien btn-insta" href="https://www.instagram.com/casalova.shop/" target="_blank" rel="noopener noreferrer">
+          Instagram
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" role="img" aria-label="Instagram">
+              <defs>
+                <radialGradient id="ig-grad" cx="30%" cy="107%" r="150%">
+                  <stop offset="0" stop-color="#fdf497"/>
+                  <stop offset=".05" stop-color="#fdf497"/>
+                  <stop offset=".45" stop-color="#fd5949"/>
+                  <stop offset=".6" stop-color="#d6249f"/>
+                  <stop offset=".9" stop-color="#285AEB"/>
+                </radialGradient>
+              </defs>
+              <path fill="url(#ig-grad)" d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.26-2.91.56-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.63-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.67 1.34 1.08 2.13 1.38.76.3 1.63.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.67-.67 1.08-1.34 1.38-2.13.3-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.63-.5-2.91-.56C15.67.01 15.26 0 12 0z"/>
+              <path fill="url(#ig-grad)" d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4z"/>
+              <circle fill="url(#ig-grad)" cx="18.41" cy="5.59" r="1.44"/>
+            </svg>
+          </span>
+        </a>
       </div>
     </div>
     <div class="box reveal">
@@ -330,70 +413,46 @@ function smoothScrollTo(target, duration){
   const endY = target.getBoundingClientRect().top + startY - headerH + 1;
   const distance = endY - startY;
   const startTime = performance.now();
-  function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+  // départ immédiat puis ralentissement : pas de temps mort au début du défilement
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
   function step(now){
     const elapsed = now - startTime;
     const progress = Math.min(elapsed/duration, 1);
-    window.scrollTo(0, startY + distance*easeInOutCubic(progress));
+    // behavior:'instant' obligatoire : 'auto' reprendrait le scroll-behavior:smooth du CSS,
+    // qui se superposerait à l'animation et retarderait le départ de plusieurs centaines de ms
+    window.scrollTo({top: startY + distance*easeOutCubic(progress), left: 0, behavior: 'instant'});
     if(progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
-document.querySelectorAll('.nav ul a[href^="#"]').forEach(link=>{
+
+// MENU MOBILE : bouton trois traits
+const burger = document.getElementById('burger');
+const navMenu = document.getElementById('navMenu');
+function setMenu(open){
+  navMenu.classList.toggle('open', open);
+  burger.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+}
+burger.addEventListener('click', ()=> setMenu(!navMenu.classList.contains('open')));
+document.addEventListener('click', e=>{
+  if(navMenu.classList.contains('open') && !navMenu.contains(e.target) && !burger.contains(e.target)) setMenu(false);
+});
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') setMenu(false); });
+
+document.querySelectorAll('.nav ul a[href^="#"], a.logo[href^="#"]').forEach(link=>{
   link.addEventListener('click', function(e){
     const id = this.getAttribute('href').slice(1);
     const target = document.getElementById(id);
     if(!target) return;
     e.preventDefault();
+    setMenu(false);
     smoothScrollTo(target, 900);
     history.pushState(null, '', '#'+id);
   });
 });
 
-// CASE "AVIS" QUI S'AGRANDIT AUTOMATIQUEMENT AVEC LE TEXTE
-const reviewTextarea = document.getElementById('reviewText');
-function autoGrowTextarea(el){
-  el.style.height = 'auto';
-  el.style.height = el.scrollHeight + 'px';
-}
-reviewTextarea.addEventListener('input', () => autoGrowTextarea(reviewTextarea));
-
-// AVIS CLIENTS — stockage local (visible uniquement sur cet appareil/navigateur)
-const REVIEWS_KEY = 'casalova_avis';
-function loadCustomerReviews(){
-  try{ return JSON.parse(localStorage.getItem(REVIEWS_KEY)) || []; }catch(e){ return []; }
-}
-function saveCustomerReviews(list){
-  localStorage.setItem(REVIEWS_KEY, JSON.stringify(list));
-}
-function renderCustomerReview(r){
-  const list = document.getElementById('reviewsList');
-  const div = document.createElement('div');
-  div.className = 'review reveal in';
-  const stars = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
-  div.innerHTML = `<div class="stars">${stars}</div><p>« ${r.text} »</p><div class="who">${r.name}</div><div class="when">À l'instant</div>`;
-  list.appendChild(div);
-}
-loadCustomerReviews().forEach(renderCustomerReview);
-
-const reviewForm = document.getElementById('reviewForm');
-reviewForm.addEventListener('submit', function(e){
-  e.preventDefault();
-  const name = document.getElementById('reviewName').value.trim();
-  const stars = parseInt(document.getElementById('reviewStars').value, 10);
-  const text = document.getElementById('reviewText').value.trim();
-  if(!name || !text) return;
-  const review = { name, stars, text };
-  const list = loadCustomerReviews();
-  list.push(review);
-  saveCustomerReviews(list);
-  renderCustomerReview(review);
-  reviewForm.reset();
-  reviewTextarea.style.height = 'auto';
-  const confirm = document.getElementById('reviewConfirm');
-  confirm.style.display = 'inline-block';
-  setTimeout(()=>{ confirm.style.display = 'none'; }, 3000);
-});
 </script>
 </body>
 </html>
